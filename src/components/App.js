@@ -1,4 +1,5 @@
 import React from "react";
+import { Route, Routes } from "react-router-dom";
 import api from '../utils/Api';
 import Header from "./Header";
 import Main from "./Main";
@@ -9,6 +10,9 @@ import AddPlacePopup from "./AddPlacePopup";
 import ImagePopup from "./ImagePopup";
 import ConfirmDeletePopup from "./ConfirmDeletePopup";
 import CurrentUserContext from "../contexts/CurrentUserContext";
+import Register from "./Register";
+import Login from "./Login";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
@@ -20,6 +24,8 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
+
+  const [loggedIn, setLoggedIn] = React.useState(false);
 
   React.useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
@@ -127,20 +133,40 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-
         <Header />
 
-        <Main
-          onEditAvatar={handleEditAvatarClick}
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onCardClick={handleCardClick}
-          onCardLike={handleCardLike}
-          onCardDelete={handleConfirmPopupclick}
-          cards={cards}
-        />
+        <Routes>
 
-        <Footer />
+          <Route path='/mesto-react' element={<ProtectedRoute element={
+            <Main
+            onEditAvatar={handleEditAvatarClick}
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
+            onCardClick={handleCardClick}
+            onCardLike={handleCardLike}
+            onCardDelete={handleConfirmPopupclick}
+            cards={cards}
+            />
+          } loggedIn={loggedIn}/>}
+          />
+
+          <Route path='/sign-up' element={
+            <Register
+              title='Регистрация'
+              buttonText='Зарегистрироваться'
+            />}
+          /> 
+
+          <Route path='/sign-in' element={
+            <Login
+              title='Вход'
+              buttonText='Войти'
+          />}
+          />
+
+        </Routes>
+
+        {loggedIn && <Footer/>}
 
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
