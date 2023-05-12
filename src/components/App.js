@@ -235,7 +235,7 @@ function App() {
             />}
           />
 
-          <Route path='/' element={loggedIn ?<Navigate to='/'/> : <Navigate to='/sign-in'/>}/>
+          <Route path='*' element={loggedIn ? <Navigate to='/'/> : <Navigate to='/sign-in'/>}/>
         </Routes>
 
         {loggedIn && <Footer/>}
