@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate, Navigate } from "react-router-dom";
 import api from '../utils/Api';
 import Header from "./Header";
 import Main from "./Main";
@@ -12,7 +12,9 @@ import ConfirmDeletePopup from "./ConfirmDeletePopup";
 import CurrentUserContext from "../contexts/CurrentUserContext";
 import Register from "./Register";
 import Login from "./Login";
+import InfoTooltip from "./InfoTooltip";
 import ProtectedRoute from "./ProtectedRoute";
+import auth from "../utils/Auth";
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
@@ -20,12 +22,16 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isImagePupopOpen, setIsImagePupopOpen] = React.useState(false);
   const [isConfirmPupopOpen, setIsConfirmPupopOpen] = React.useState(false);
+  const [isInfoTooltipPupopOpen, setIsInfoTooltipPupopOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
-
   const [loggedIn, setLoggedIn] = React.useState(false);
+  const [isInfoTooltipCorrect, setIsInfoTooltipCorrect] = React.useState(false);
+  const [userEmail, setUserEmail] = React.useState('');
+
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
@@ -105,6 +111,7 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsImagePupopOpen(false);
     setIsConfirmPupopOpen(false);
+    setIsInfoTooltipPupopOpen(false)
   }
 
   function handleCardLike(card) {
@@ -130,30 +137,93 @@ function App() {
       })
   }
 
+  function handleRegister(email, password) {
+    auth.register(email, password)
+      .then((res) => {
+        if(res) {
+          setIsInfoTooltipCorrect(true);
+          setIsInfoTooltipPupopOpen(true);
+          navigate("/sign-in", {replace: true})
+        }
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+        setIsInfoTooltipCorrect(false);
+        setIsInfoTooltipPupopOpen(true);
+      })
+  }
+
+  function handdleLogin(email, password) {
+    auth.authorize(email, password)
+    .then((res) => {
+      if(res.token) {
+        setUserEmail(`${email}`);
+        localStorage.setItem("jwt", res.token);
+        setLoggedIn(true);
+        navigate("/", {replace: true})
+      }
+    })
+    .catch((err) => {
+      console.log(`Ошибка: ${err}`);
+      setIsInfoTooltipCorrect(false);
+      setIsInfoTooltipPupopOpen(true);
+    })
+  }
+
+  function handleTokenCheck() {
+    const jwt = localStorage.getItem('jwt');
+
+    if (jwt){
+      auth.getContent(jwt)
+        .then((res) => {
+          if(res) {
+            setUserEmail(`${res.data.email}`);
+            setLoggedIn(true);
+            navigate('/', {replace: true})
+          }
+        })
+        .catch((err) => {
+          console.log(`Ошибка: ${err}`);
+        })
+    };
+  }
+
+  React.useEffect(() => {
+    handleTokenCheck();
+  }, [])
+
+  function handleLogout() {
+    setLoggedIn(false);
+    localStorage.removeItem('jwt');
+    navigate('/sign-in', {replace: true})
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header />
+        <Header
+          email={userEmail}
+          onLogout={handleLogout}
+        />
 
         <Routes>
-
-          <Route path='/mesto-react' element={<ProtectedRoute element={
-            <Main
+          <Route path='/' element={<ProtectedRoute
+            element={Main}
             onEditAvatar={handleEditAvatarClick}
             onEditProfile={handleEditProfileClick}
             onAddPlace={handleAddPlaceClick}
             onCardClick={handleCardClick}
             onCardLike={handleCardLike}
             onCardDelete={handleConfirmPopupclick}
-            cards={cards}
-            />
-          } loggedIn={loggedIn}/>}
+            cards={cards}          
+            loggedIn={loggedIn}/>}
           />
 
           <Route path='/sign-up' element={
             <Register
               title='Регистрация'
               buttonText='Зарегистрироваться'
+              onRegister={handleRegister}
             />}
           /> 
 
@@ -161,9 +231,11 @@ function App() {
             <Login
               title='Вход'
               buttonText='Войти'
-          />}
+              onLogin={handdleLogin}
+            />}
           />
 
+          <Route path='/' element={loggedIn ?<Navigate to='/'/> : <Navigate to='/sign-in'/>}/>
         </Routes>
 
         {loggedIn && <Footer/>}
@@ -200,6 +272,13 @@ function App() {
           onClose={closeAllPopups}
           onDelete={handleCardDelete}
           card={selectedCard}
+        />
+
+        <InfoTooltip
+          isOpen={isInfoTooltipPupopOpen}
+          onClose={closeAllPopups}
+          isCorrect={isInfoTooltipCorrect}
+          title={isInfoTooltipCorrect ? 'Вы успешно зарегистрировались!' : 'Что-то пошло не так! Попробуйте еще раз.'}
         />
         
       </div>

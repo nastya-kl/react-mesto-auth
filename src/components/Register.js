@@ -7,8 +7,6 @@ function Register(props) {
     password: "",
   });
 
-  //const navigate = useNavigate();
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValue({
@@ -19,7 +17,7 @@ function Register(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // здесь обработчик регистрации
+    props.onRegister(formValue.email, formValue.password);
   };
 
   return (

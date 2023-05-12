@@ -9,7 +9,7 @@
   max-width: 358px;
   border-radius: 2px;
   border: none;
-  transition: opacity .6s;
+  transition: opacity .2s;
 }
 
 .auth__button:hover {

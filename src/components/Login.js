@@ -1,5 +1,4 @@
 import React from "react";
-import '../blocks/auth/auth.css';
 
 function Login(props) {
   const [formValue, setFormValue] = React.useState({
@@ -17,7 +16,7 @@ function Login(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // здесь обработчик регистрации
+    props.onLogin(formValue.email, formValue.password)
   };
 
   return (
