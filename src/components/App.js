@@ -160,7 +160,7 @@ function App() {
         setUserEmail(`${email}`);
         localStorage.setItem("jwt", res.token);
         setLoggedIn(true);
-        navigate("/", {replace: true})
+        navigate("/react-mesto-auth", {replace: true})
       }
     })
     .catch((err) => {
@@ -179,7 +179,7 @@ function App() {
           if(res) {
             setUserEmail(`${res.data.email}`);
             setLoggedIn(true);
-            navigate('/', {replace: true})
+            navigate('/react-mesto-auth', {replace: true})
           }
         })
         .catch((err) => {
@@ -207,7 +207,7 @@ function App() {
         />
 
         <Routes>
-          <Route path='/' element={<ProtectedRoute
+          <Route path='/react-mesto-auth' element={<ProtectedRoute
             element={Main}
             onEditAvatar={handleEditAvatarClick}
             onEditProfile={handleEditProfileClick}
@@ -235,7 +235,7 @@ function App() {
             />}
           />
 
-          <Route path='*' element={loggedIn ? <Navigate to='/'/> : <Navigate to='/sign-in'/>}/>
+          <Route path='*' element={loggedIn ? <Navigate to='/react-mesto-auth'/> : <Navigate to='/sign-in'/>}/>
         </Routes>
 
         {loggedIn && <Footer/>}
