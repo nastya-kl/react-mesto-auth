@@ -1,23 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import useForm from "../hooks/useForm";
 
 function Register(props) {
-  const [formValue, setFormValue] = React.useState({
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormValue({
-      ...formValue,
-      [name]: value,
-    });
-  };
+  const { values, handleChange } = useForm();
+  const { email, password } = values;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.onRegister(formValue.email, formValue.password);
+    props.onRegister( email, password );
   };
 
   return (
@@ -30,7 +21,7 @@ function Register(props) {
           type="email"
           placeholder="Email"
           className="auth__imput"
-          value={formValue.email}
+          value={email ?? ''}
           onChange={handleChange}
         />
         <input
@@ -39,10 +30,10 @@ function Register(props) {
           type="password"
           placeholder="Пароль"
           className="auth__imput"
-          value={formValue.password}
+          value={password ?? ''}
           onChange={handleChange}
         />
-        <button type="submit" onSubmit={handleSubmit} className="auth__button">
+        <button type="submit" className="auth__button">
           {props.buttonText}
         </button>
         <div className="auth__sign-up">

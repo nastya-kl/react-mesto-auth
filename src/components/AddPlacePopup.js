@@ -1,29 +1,21 @@
 import React from "react";
 import PopupWithForm from "./PopupWithForm";
+import useForm from '../hooks/useForm';
 
 function AddPlacePopup(props) {
-  const [imageLink, setImageLink] = React.useState('');
-  const [imageName, setImageName] = React.useState('');
+  const { values, handleChange, setValues } = useForm();
+  const { name, link } = values;
 
   React.useEffect(() => {
-    setImageLink('');
-    setImageName('');
-  }, [props.isOpen])
-
-  function changeImageLink(e) {
-    setImageLink(e.target.value);
-  }
-
-  function changeImageName(e) {
-    setImageName(e.target.value);
-  }
+    setValues({});
+  }, [props.isOpen, setValues])
 
   function handleSubmit(e) {
     e.preventDefault();
   
     props.onAddPlace({
-      link: imageLink,
-      name: imageName
+      link: link,
+      name: name
     });
   }
 
@@ -46,8 +38,8 @@ function AddPlacePopup(props) {
           minLength="2"
           maxLength="30"
           required
-          value={imageName || ''}
-          onChange={changeImageName}
+          value={name || ''}
+          onChange={handleChange}
         />
         <span className="image-name-imput-error popup__input-error"></span>
       </label>
@@ -59,8 +51,8 @@ function AddPlacePopup(props) {
           name="link"
           placeholder="Ссылка на картинку"
           required
-          value={imageLink || ''}
-          onChange={changeImageLink}
+          value={link || ''}
+          onChange={handleChange}
         />
         <span className="image-url-imput-error popup__input-error"></span>
       </label>

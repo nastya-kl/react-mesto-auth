@@ -1,32 +1,26 @@
 import React from "react";
 import CurrentUserContext from "../contexts/CurrentUserContext";
 import PopupWithForm from "./PopupWithForm";
+import useForm from "../hooks/useForm";
 
 function EditProfilePopup(props) {
-  const [name, setName] = React.useState('');
-  const [description, setDescription] = React.useState('');
-
   const currentUser = React.useContext(CurrentUserContext);
+  const { values, handleChange, setValues } = useForm();
+  const { name, job } = values;
 
   React.useEffect(() => {
-    setName(currentUser.name);
-    setDescription(currentUser.about);
-  }, [currentUser, props.isOpen]); 
-
-  function changeName(e) {
-    setName(e.target.value);
-  }
-
-  function changeDescription(e) {
-    setDescription(e.target.value);
-  }
+    setValues({
+      name: currentUser.name,
+      job: currentUser.about
+    })
+  }, [currentUser, props.isOpen, setValues]); 
 
   function handleSubmit(e) {
     e.preventDefault();
   
     props.onUpdateUser({
       name: name,
-      about: description,
+      about: job
     });
   } 
 
@@ -50,7 +44,7 @@ function EditProfilePopup(props) {
           maxLength="40"
           required
           value={name || ''}
-          onChange={changeName}
+          onChange={handleChange}
         />
         <span className="profile-name-input-error popup__input-error"></span>
       </label>
@@ -64,8 +58,8 @@ function EditProfilePopup(props) {
           minLength="2"
           maxLength="200"
           required
-          value={description || ''}
-          onChange={changeDescription}
+          value={job || ''}
+          onChange={handleChange}
         />
         <span className="profile-job-input-error popup__input-error"></span>
       </label>

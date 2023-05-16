@@ -142,13 +142,14 @@ function App() {
       .then((res) => {
         if(res) {
           setIsInfoTooltipCorrect(true);
-          setIsInfoTooltipPupopOpen(true);
           navigate("/sign-in", {replace: true})
         }
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
         setIsInfoTooltipCorrect(false);
+      })
+      .finally(() => {
         setIsInfoTooltipPupopOpen(true);
       })
   }
@@ -174,7 +175,7 @@ function App() {
     const jwt = localStorage.getItem('jwt');
 
     if (jwt){
-      auth.getContent(jwt)
+      auth.checkToken(jwt)
         .then((res) => {
           if(res) {
             setUserEmail(`${res.data.email}`);

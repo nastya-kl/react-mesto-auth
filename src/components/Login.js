@@ -1,22 +1,13 @@
 import React from "react";
+import useForm from "../hooks/useForm";
 
 function Login(props) {
-  const [formValue, setFormValue] = React.useState({
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormValue({
-      ...formValue,
-      [name]: value,
-    });
-  };
+  const { values, handleChange } = useForm();
+  const { email, password } = values;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.onLogin(formValue.email, formValue.password)
+    props.onLogin(email, password)
   };
 
   return (
@@ -31,7 +22,7 @@ function Login(props) {
           type="email"
           placeholder="Email"
           className="auth__imput"
-          value={formValue.email}
+          value={email || ''}
           onChange={handleChange}
         />
         <input
@@ -40,12 +31,11 @@ function Login(props) {
           type="password"
           placeholder="Пароль"
           className="auth__imput"
-          value={formValue.password}
+          value={password || ''}
           onChange={handleChange}
         />
           <button
             type="submit"
-            onSubmit={handleSubmit}
             className="auth__button"
           >
             {props.buttonText}

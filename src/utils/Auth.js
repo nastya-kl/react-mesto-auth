@@ -33,7 +33,7 @@ class Auth {
   }
 
   // Получить данные пользователя для проверки токена
-  getContent(token) {
+  checkToken(token) {
     return fetch(`${this.baseUrl}/users/me`, {
       method: "GET",
       headers: {
