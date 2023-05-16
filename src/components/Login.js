@@ -2,7 +2,7 @@ import React from "react";
 import useForm from "../hooks/useForm";
 
 function Login(props) {
-  const { values, handleChange } = useForm();
+  const { values, handleChange } = useForm({});
   const { email, password } = values;
 
   const handleSubmit = (e) => {

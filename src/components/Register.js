@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import useForm from "../hooks/useForm";
 
 function Register(props) {
-  const { values, handleChange } = useForm();
+  const { values, handleChange } = useForm({});
   const { email, password } = values;
 
   const handleSubmit = (e) => {
@@ -21,7 +21,7 @@ function Register(props) {
           type="email"
           placeholder="Email"
           className="auth__imput"
-          value={email ?? ''}
+          value={email || ''}
           onChange={handleChange}
         />
         <input
@@ -30,7 +30,7 @@ function Register(props) {
           type="password"
           placeholder="Пароль"
           className="auth__imput"
-          value={password ?? ''}
+          value={password || ''}
           onChange={handleChange}
         />
         <button type="submit" className="auth__button">

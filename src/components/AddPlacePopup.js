@@ -3,7 +3,7 @@ import PopupWithForm from "./PopupWithForm";
 import useForm from '../hooks/useForm';
 
 function AddPlacePopup(props) {
-  const { values, handleChange, setValues } = useForm();
+  const { values, handleChange, setValues } = useForm({});
   const { name, link } = values;
 
   React.useEffect(() => {

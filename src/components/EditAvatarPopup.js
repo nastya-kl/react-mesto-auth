@@ -3,11 +3,11 @@ import PopupWithForm from "./PopupWithForm";
 import useForm from "../hooks/useForm";
 
 function EditAvatarPopup(props) {
-  const { values, handleChange, setValues } = useForm();
+  const { values, handleChange, setValues } = useForm({});
   const { link } = values;
 
   React.useEffect(() => {
-    setValues('');
+    setValues({});
   }, [props.isOpen, setValues]); 
 
   function handleSubmit(e) {
@@ -36,7 +36,7 @@ function EditAvatarPopup(props) {
           name="link"
           placeholder="Ссылка на картинку"
           required
-          value={link ?? ''}
+          value={link || ''}
           onChange={handleChange}
         />
         <span className="avatar-url-imput-error popup__input-error"></span>

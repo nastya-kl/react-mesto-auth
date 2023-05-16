@@ -1,7 +1,7 @@
 import React from 'react';
 
-export default function useForm() {
-  const [values, setValues] = React.useState({});
+export default function useForm(inputValues={}) {
+  const [values, setValues] = React.useState(inputValues);
 
   const handleChange = (event) => {
     const {value, name} = event.target;

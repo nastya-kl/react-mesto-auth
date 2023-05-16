@@ -5,7 +5,7 @@ import useForm from "../hooks/useForm";
 
 function EditProfilePopup(props) {
   const currentUser = React.useContext(CurrentUserContext);
-  const { values, handleChange, setValues } = useForm();
+  const { values, handleChange, setValues } = useForm({});
   const { name, job } = values;
 
   React.useEffect(() => {
