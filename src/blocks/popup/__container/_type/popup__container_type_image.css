@@ -1,11 +1,11 @@
-.popup____container_type_image {
+.popup__container_type_image {
   margin: 0 80px;
   padding: 0;
   position: fixed;
 }
 
 @media screen and (max-width: 600px) {
-  .popup____container_type_image {
+  .popup__container_type_image {
     margin: 0 40px;
   }
 }
