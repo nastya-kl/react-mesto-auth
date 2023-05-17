@@ -18,11 +18,10 @@ function EditAvatarPopup(props) {
     });
   } 
 
-
   return (
     <PopupWithForm
       title="Обновить аватар"
-      name="avatar"
+      name="info"
       buttonText={props.isLoading ? 'Сохранение...' : 'Сохранить'}
       isOpen={props.isOpen}
       onClose={props.onClose}

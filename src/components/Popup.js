@@ -1,8 +1,8 @@
-import ClosedByEsc from "../hooks/closedByEsc";
+import useClosedByEsc from "../hooks/useClosedByEsc";
 
 const Popup = ({ isOpen, onClose, name, children }) => {
 
-  ClosedByEsc({isOpen, onClose});
+  useClosedByEsc({isOpen, onClose});
 
   const handleOverlay = (e) => {
     if (e.target === e.currentTarget) {
@@ -12,10 +12,10 @@ const Popup = ({ isOpen, onClose, name, children }) => {
 
   return (
     <div
-      className={`popup ${isOpen ? "popup_opened" : ""} popup_type_${name}`}
+      className={`popup ${isOpen ? "popup_opened" : ""}`}
       onMouseDown={handleOverlay}
     >
-      <div className={'popup__container'}>
+      <div className={`popup__container_type_${name}`}>
         {children}
         <button
           className="popup__close-icon"

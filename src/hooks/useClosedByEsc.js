@@ -1,6 +1,6 @@
 import React from "react";
 
-function ClosedByEsc({ isOpen, onClose }) {
+function useClosedByEsc({ isOpen, onClose }) {
 
   React.useEffect(() => {
     if (!isOpen) return;
@@ -17,4 +17,4 @@ function ClosedByEsc({ isOpen, onClose }) {
   }, [isOpen, onClose]);
 }
 
-export default ClosedByEsc;
+export default useClosedByEsc;
